@@ -1,3 +1,5 @@
+
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -14,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import static Constants.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Rick
@@ -24,7 +28,7 @@ import java.util.Scanner;
 public class MostReviewRestaurants {
     public static void main(String[] arg) {
         try {
-            System.setIn(new FileInputStream("yelp_academic_dataset_business.json"));
+            System.setIn(new FileInputStream(BUSINESS));
             System.setOut(new PrintStream(new FileOutputStream("mostReviewRestaurants.txt")));
         } catch (FileNotFoundException e) { }
         Scanner in = new Scanner(System.in);
