@@ -1,4 +1,4 @@
-
+package yelpdata;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import static Constants.*;
+import static yelpdata.Constants.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,11 +26,14 @@ import static Constants.*;
  * To change this template use File | Settings | File Templates.
  */
 public class MostReviewRestaurants {
-    public static void main(String[] arg) {
+    public static ArrayList<Map.Entry<String, Long>> mostReviewRestaurants() {
         try {
             System.setIn(new FileInputStream(BUSINESS));
-            System.setOut(new PrintStream(new FileOutputStream("mostReviewRestaurants.txt")));
-        } catch (FileNotFoundException e) { }
+//            System.setOut(new PrintStream(new FileOutputStream("mostReviewRestaurants.txt")));
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found.");
+            System.exit(1);
+        }
         Scanner in = new Scanner(System.in);
         HashMap<String, Long> count = new HashMap<String, Long>();
         while (in.hasNextLine()) {
@@ -52,8 +55,9 @@ public class MostReviewRestaurants {
                 return entry2.getValue() > entry1.getValue() ? 1 : -1;
             }
         });
-        for (int i = 0; i < 100; i++) {
-            System.out.println(entryList.get(i).getKey() + " " + entryList.get(i).getValue());
-        }
+        return entryList;
+//        for (int i = 0; i < 100; i++) {
+//            System.out.println(entryList.get(i).getKey() + " " + entryList.get(i).getValue());
+//        }
     }
 }

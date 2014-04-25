@@ -1,3 +1,5 @@
+package yelpdata;
+
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -10,8 +12,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
+
+import static yelpdata.Constants.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,37 +25,33 @@ import java.util.Scanner;
  * Time: 4:23 PM
  * To change this template use File | Settings | File Templates.
  */
-public class MostCommonKeywordWithinARestaurant {
-    public static void main(String[] arg) {
-        final int NTHMOSTREVIEW = 2;
-        Scanner getRestaurantID = null;
+public class MostCommonKeyword {
+    public static ArrayList<Map.Entry<String, Integer>> mostCommonKeywordsInTopNRestaurants(
+            ArrayList<Map.Entry<String, Long>> restaurantList, int n, int[] reviewCount) {
         Scanner getReview = null;
-        PrintStream writeMostCommon = null;
         try {
-            getRestaurantID = new Scanner(new FileInputStream("mostReviewRestaurants.txt"));
-            getReview = new Scanner(new FileInputStream("yelp_academic_dataset_review.json"));
-            writeMostCommon = new PrintStream(new FileOutputStream("mostCommonKeywordWithinARestaurant.txt"));
+            getReview = new Scanner(new FileInputStream(REVIEW));
         } catch (FileNotFoundException e) {
             System.err.println("File not found.");
             System.exit(1);
         }
 
-        for (int i = 1; i < NTHMOSTREVIEW; i++) {
-            getRestaurantID.nextLine();
-        }
-        String restaurant_id = getRestaurantID.next();
-
         HashMap<String, Integer> count = new HashMap<String, Integer>();
-        int reviewCount = 0;
+        HashSet<String> restaurants = new HashSet<String>();
+        for (int i = 0; i < n; i++) {
+            String restaurant_id = restaurantList.get(i).getKey();
+            restaurants.add(restaurant_id);
+        }
 
         while (getReview.hasNextLine()) {
             JSONObject json = (JSONObject)JSONValue.parse(getReview.nextLine());
-            if (!json.get("business_id").equals(restaurant_id)) {
+            if (!restaurants.contains(json.get("business_id"))) {
                 continue;
             }
-            reviewCount++;
+            reviewCount[0]++;
             String review = (String)json.get("text");
             Scanner strScanner = new Scanner(review);
+//            strScanner.useDelimiter("[\\W]+");
             while (strScanner.hasNext()) {
                 String word = strScanner.next().toLowerCase();
                 if (count.containsKey(word)) {
@@ -69,10 +70,7 @@ public class MostCommonKeywordWithinARestaurant {
                 return entry2.getValue() - entry1.getValue();
             }
         });
-        for (int i = 0; i < 1000; i++) {
-            writeMostCommon.println(entryList.get(i).getKey() + " " +entryList.get(i).getValue());
-        }
-        System.out.println("ReviewCount = "+reviewCount);
+        return entryList;
     }
 //    private static class StringIgnoreCase {
 //        String str;

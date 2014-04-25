@@ -1,3 +1,5 @@
+package yelpdata;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Rick

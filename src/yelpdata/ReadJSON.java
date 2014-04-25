@@ -1,3 +1,5 @@
+package yelpdata;
+
 import org.json.simple.*;
 
 import java.io.File;
